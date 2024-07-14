@@ -91,7 +91,7 @@ export default function Sidebar() {
                         <Link to="/changepassword">Change password</Link>
                     </li>
                     <li className="list-group-item">
-                        <Link to="#" onClick={handleLogout}>Log out</Link>
+                        <Link to="/" onClick={handleLogout}>Log out</Link>
                     </li>
                 </ul>
             </div>

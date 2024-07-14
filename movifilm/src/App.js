@@ -34,6 +34,8 @@ import AdminMovieList from "./components/AdminMovieList";
 import AdminMovieDetail from "./components/AdminMovieDetail";
 import AdminLayout from "./layout/AdminLayout";
 import AdminAddMovie from "./components/AdminAddMovie";
+import UserDetail from "./components/UserDetail";
+import HomeAdmin from "./components/HomeAdmin";
 
 function App() {
   return (
@@ -98,12 +100,14 @@ function App() {
         </div>
         <div style={{ backgroundColor: "white", overflowX: "none" }}>
           <Routes>
+            
             <Route
               path="admin"
+              
               element={
-                <AdminLayout>
-                  <AdminMovieList />
-                </AdminLayout>
+
+                  <HomeAdmin/>
+                
               }
             />
             <Route
@@ -131,6 +135,7 @@ function App() {
               }
             />
             <Route path="admin/cast" element={<AdminLayout><AdminCast /></AdminLayout>} />
+            <Route path="admin/user" element={<AdminLayout><UserDetail /></AdminLayout>} />
 
           </Routes>
         </div>

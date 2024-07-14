@@ -8,20 +8,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [users, setUsers] = useState([]);
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-  const handleRePasswordChange = (e) => {
-    setRePassword(e.target.value);
-  };
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,16 +23,32 @@ export default function Signup() {
     fetchData();
   }, []);
 
-  const generateNewId = () => {
-    const ids = users.map((user) => user.id);
-    const maxId = Math.max(...ids);
-    return maxId + 1;
+  const validateForm = () => {
+    const errors = {};
+    if (!username.trim()) {
+      errors.username = "Username is required";
+    }
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "Email address is invalid";
+    }
+    if (!password.trim()) {
+      errors.password = "Password is required";
+    } else if (password.length < 8) {
+      errors.password = "Password must be at least 8 characters long";
+    }
+    if (password !== rePassword) {
+      errors.rePassword = "Passwords do not match";
+    }
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== rePassword) {
-      alert("Passwords do not match");
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
       return;
     }
 
@@ -74,13 +77,39 @@ export default function Signup() {
       });
 
       if (response.ok) {
-       alert("User registered successfully:", newUser);
+        alert("User registered successfully:", newUser);
       } else {
-       alert("Registration failed");
+        alert("Registration failed");
       }
     } catch (error) {
       alert("Error registering user:", error);
     }
+  };
+
+  const generateNewId = () => {
+    const ids = users.map((user) => user.id);
+    const maxId = Math.max(...ids);
+    return maxId + 1;
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    setErrors({ ...errors, username: "" }); // Clear username error when typing
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setErrors({ ...errors, email: "" }); // Clear email error when typing
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    setErrors({ ...errors, password: "" }); // Clear password error when typing
+  };
+
+  const handleRePasswordChange = (e) => {
+    setRePassword(e.target.value);
+    setErrors({ ...errors, rePassword: "" }); // Clear rePassword error when typing
   };
 
   const backgroundStyle = {
@@ -99,20 +128,18 @@ export default function Signup() {
     padding: "50px",
     borderRadius: "10px",
   };
+
   const buttonStyle = {
     width: "100%", // Đảm bảo nút chiếm toàn bộ chiều rộng của form
     fontSize: "20px", // Kích thước chữ của nút
     textAlign: "center",
   };
+
   return (
     <div style={backgroundStyle}>
       <div style={formStyle}>
         <Form onSubmit={handleSubmit}>
-          <Form.Group
-            className="mb-3"
-            controlId="formBasicEmail"
-            style={{ textAlign: "center" }}
-          >
+          <Form.Group className="mb-3" controlId="formBasicEmail" style={{ textAlign: "center" }}>
             <h3>Sign Up</h3>
           </Form.Group>
 
@@ -123,8 +150,11 @@ export default function Signup() {
               placeholder="Username"
               value={username}
               onChange={handleUsernameChange}
+              isInvalid={!!errors.username}
             />
+            <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -132,8 +162,11 @@ export default function Signup() {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
+              isInvalid={!!errors.email}
             />
+            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -141,29 +174,35 @@ export default function Signup() {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
+              isInvalid={!!errors.password}
             />
+            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
             <Form.Text className="text-muted">
               We'll never share your password with anyone else.
             </Form.Text>
           </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicRePassword">
             <Form.Label>Re-password</Form.Label>
             <Form.Control
               type="password"
-              placeholder="Re-Pasword"
+              placeholder="Re-Password"
               value={rePassword}
               onChange={handleRePasswordChange}
+              isInvalid={!!errors.rePassword}
             />
+            <Form.Control.Feedback type="invalid">{errors.rePassword}</Form.Control.Feedback>
             <Form.Text className="text-muted">
-              We'll never share your password with anyone else.
+              Please re-enter your password.
             </Form.Text>
           </Form.Group>
+
           <Form.Group style={buttonStyle}>
             <Button
               variant="danger"
               type="submit"
               size="lg"
-              style={{ padding: "10px 120px", marginTop: '12px' }}
+              style={{ padding: "10px 120px", marginTop: "12px" }}
             >
               Sign up
             </Button>

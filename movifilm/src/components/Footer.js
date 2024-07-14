@@ -46,8 +46,8 @@ export default function Footer() {
         <Row className="flex-parent-ft">
           <Col className="flex-child-ft item1">
             <Link to="index-2.html"><img className="logo" width="250" src="images/logo1.png" alt="" /></Link>
-            <p>Group 2 SE1741 - FPT University</p>
-            <p>Call us: <Link to="#">(+84) 834235369</Link></p>
+            <p>FPT University</p>
+            <p>Call us: <Link to="#">(+84) 034520356</Link></p>
           </Col>
           <Col className="flex-child-ft item2">
             <h4>Resources</h4>

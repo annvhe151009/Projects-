@@ -1,8 +1,32 @@
 import React, { useState } from "react";
 import { Form, Button, Row, Col, Alert } from "react-bootstrap";
-import backgroundImage from "../image/slider-bg.jpg"; // Đường dẫn đến hình ảnh nền
+import backgroundImage from "../image/slider-bg.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
+const backgroundStyle = {
+  backgroundImage: `url(${backgroundImage})`,
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const formStyle = {
+  marginTop: "90px",
+  backgroundColor: "rgba(255, 255, 255, 0.8)",
+  padding: "50px",
+  borderRadius: "10px",
+};
+
+const buttonStyle = {
+  width: "100%",
+  fontSize: "20px",
+  textAlign: "center",
+  marginTop: "12px",
+};
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -10,7 +34,7 @@ export default function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
+  const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
 
@@ -32,59 +56,37 @@ export default function Login() {
           (item) => item.username === username && item.password === password
         );
         if (foundUser) {
-          // Đăng nhập thành công, chuyển hướng đến trang Home
           localStorage.setItem("user", JSON.stringify(foundUser));
-          window.location.href = "/";
+          if (foundUser.role === "ADMIN") {
+            // Nếu là admin, chuyển hướng đến trang admin
+            window.location.href = "http://localhost:3000/admin";
+          } else {
+            // Nếu là user thông thường, chuyển hướng đến trang chủ
+            window.location.href = "/";
+          }
         } else {
-          // Hiển thị thông báo đăng nhập không hợp lệ
           setMessage("Invalid username or password. Please try again.");
         }
       })
       .catch((error) => console.error(error));
   };
 
-  const backgroundStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "",
-    backgroundPosition: "center",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
-  const formStyle = {
-    marginTop: "90px",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    padding: "50px",
-    borderRadius: "10px",
-  };
-  const buttonStyle = {
-    width: "100%", // Đảm bảo nút chiếm toàn bộ chiều rộng của form
-    fontSize: "20px", // Kích thước chữ của nút
-    textAlign: "center",
-    marginTop: "12px"
-  };
-
   return (
     <div style={backgroundStyle}>
       <div style={formStyle}>
         <Form onSubmit={handleLogin}>
-          <Form.Group
-            className="mb-3"
-            controlId="formBasicEmail"
-            style={{ textAlign: "center" }}
-          >
-            <h3>Login</h3>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <h3 style={{ textAlign: "center" }}>Login</h3>
           </Form.Group>
-          {message.length > 0 && <Alert variant="danger">{message}</Alert>}
+          {message && <Alert variant="danger">{message}</Alert>}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Username</Form.Label>
             <Form.Control
-              type="username"
-              placeholder="Username"
+              type="text"
+              placeholder="Enter username"
               value={username}
-              onChange={handleEmailChange}
+              onChange={handleUsernameChange}
+              required
             />
           </Form.Group>
 
@@ -95,27 +97,23 @@ export default function Login() {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
+              required
             />
-            <Form.Text className="text-muted">
-              We'll never share your password with anyone else.
-            </Form.Text>
           </Form.Group>
+
           <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 6 }}>
+            <Col sm={{ span: 5 }}>
               <Form.Check type="checkbox" label="Remember me" />
             </Col>
-            <Col sm={{ span: 6 }}>
-              <Link>Forget Password?</Link>
+            <Col sm={{ span: 4 }}>
+              <Link to={`/resetpassword`}>Forget Password?</Link>
+            </Col>
+            <Col sm={{ span: 5 }}>
             </Col>
           </Form.Group>
 
           <Form.Group style={buttonStyle}>
-            <Button
-              variant="danger"
-              type="submit"
-              size="md"
-              style={{ width: '100%' }}
-            >
+            <Button variant="danger" type="submit" size="md">
               Login
             </Button>
           </Form.Group>

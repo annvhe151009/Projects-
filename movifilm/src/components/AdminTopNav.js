@@ -29,7 +29,7 @@ export default function AdminTopNav() {
                             <ul class="dropdown-menu">
                                 <li><Link to={'/userprofile'} >Profile</Link></li>
                                 <li><Link to={'/changepassword'}>Change Password</Link></li>
-                                <li><Link onClick={handleLogout}><i class="fa fa-sign-out pull-right"></i> Log Out</Link></li>
+                                <li><Link  to="/" onClick={handleLogout}><i class="fa fa-sign-out pull-right"></i> Log Out</Link></li>
                             </ul>
                         </li>
 

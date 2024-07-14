@@ -10,7 +10,7 @@ export default function AdminSidebar() {
       style={{ position: "fixed", height: "100vh" }}
     >
       <Navbar.Brand style={{ width: "230px" }}>
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/admin" style={{ textDecoration: "none" }}>
           <img
             className="logo"
             src="/images/logo1.png"
@@ -44,12 +44,7 @@ export default function AdminSidebar() {
                 <span className="fa fa-chevron-right"></span>
               </Link>
             </li>
-            <li>
-              <Link>
-                <i className="fa fa-edit"></i> Genre{" "}
-                <span className="fa fa-chevron-right"></span>
-              </Link>
-            </li>
+
             <li>
               <Link to={"/admin/cast"}>
                 <i className="fa fa-users-rectangle"></i> Casts{" "}
@@ -57,17 +52,12 @@ export default function AdminSidebar() {
               </Link>
             </li>
             <li>
-              <Link>
+              <Link to={"/admin/user"}>
                 <i className="fa fa-user"></i> Users{" "}
                 <span className="fa fa-chevron-right"></span>
               </Link>
             </li>
-            <li>
-              <Link>
-                <i className="fa fa-clipboard"></i> Report{" "}
-                <span className="fa fa-chevron-right"></span>
-              </Link>
-            </li>
+
             {/* <li><Link><i className="fa fa-bar-chart-o"></i> Report <span ></span></Link></li> */}
           </ul>
         </div>

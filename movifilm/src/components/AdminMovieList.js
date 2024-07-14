@@ -1,9 +1,7 @@
-import axios from "axios";
-import Handle from "rc-slider/lib/Handles/Handle";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import './Admin.css'; 
-
+import axios from "axios";
+import "./Admin.css";
 
 function AdminMovieList() {
   const searchRef = useRef();
@@ -11,14 +9,11 @@ function AdminMovieList() {
   const [usersRate, setUsersRate] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [sortObject, setSortObject] = useState({});
-  /**
-   * Init: fetch total rating data by movie_id
-   */
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:9999/rate`)
-      .then((response) => response.data)
-      .then((data) => setUsersRate(data.filter((item) => item.rating)));
+    axios.get(`http://localhost:9999/rate`).then((response) => {
+      setUsersRate(response.data.filter((item) => item.rating));
+    });
   }, []);
 
   useEffect(() => {
@@ -26,22 +21,22 @@ function AdminMovieList() {
     searchRef.current.style.color = "Black";
   }, []);
 
-  /**
-   * Init: fetch total rating data by movie_id
-   */
   useEffect(() => {
     let query = "";
     if (sortObject?.key) {
       query = `?_sort=${sortObject?.key}&_order=${sortObject?.value}`;
     }
-    axios
-      .get(`http://localhost:9999/movie${query}`)
-      .then((response) => response.data)
-      .then((data) => setMovies(data));
+    axios.get(`http://localhost:9999/movie${query}`).then((response) => {
+      setMovies(response.data);
+    });
   }, [sortObject]);
 
   const handleSortClick = (key, value) => {
     setSortObject({ key, value });
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
   };
 
   return (
@@ -52,10 +47,10 @@ function AdminMovieList() {
         className="form-control"
         id="myInput"
         type="text"
-        placeholder="Search.."
+        placeholder="Search by name"
         style={{ marginBottom: "12px" }}
-        onChange={(e) => setSearchValue(e.target.value)}
-      ></input>
+        onChange={handleSearchChange}
+      />
       <table className="table table-hover table-striped">
         <thead>
           <tr>
@@ -172,18 +167,9 @@ function AdminMovieList() {
         </thead>
         <tbody>
           {movies
-            ?.filter((movie) => {
-              return (
-                movie.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-                movie.release_year
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase()) ||
-                movie.description
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase()) ||
-                movie.director.toLowerCase().includes(searchValue.toLowerCase())
-              );
-            })
+            ?.filter((movie) =>
+              movie.name.toLowerCase().includes(searchValue.toLowerCase())
+            )
             .map((movie) => (
               <tr key={movie.id}>
                 <td>
