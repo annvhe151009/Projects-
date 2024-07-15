@@ -1,4 +1,4 @@
-### Movie Film Project
+# Movie Film Project
 ## Features
 1. Login: Secure user authentication system.
 2. Logout: Easy and quick logout functionality.
